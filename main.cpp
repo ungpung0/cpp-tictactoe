@@ -2,23 +2,22 @@
 #include <windows.h>
 
 #define LENGTH 3
-#define TOTAL 9
+#define MAX 9
 
-enum Commands;
+void showMenu();
 void showHelp();
-
 void showGame(int board[][LENGTH], bool* condition, char* player);
 bool* checkCondition(int board[][LENGTH], int* col, int* row, bool* condition);
-char* playGame(int board[][LENGTH], bool* condition, char* player);
-void replay(int board[][LENGTH]);
+char* playGame(int board[][LENGTH], bool* condition, char* player, int* turn);
+void replay(int board[][LENGTH], char* player, int *turn);
 void exitGame();
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    showMenu();
     return 0;
 }
 
-enum Commands {
+enum commands {
     COMMAND_HELP,
     COMMAND_PLAY,
     COMMAND_DISPLAY,
@@ -34,12 +33,13 @@ void showMenu() {
     std::cout << "=============================================" << std::endl;
 
     int board[LENGTH][LENGTH] = {0};
+    int turn = 1;
     char player = 'O';
     bool condition = true;
 
     while(true) {
         int command;
-        std::cout << "ì»¤ë§¨ë“œ > ";
+        std::cout << "Ä¿¸Çµå > ";
         std::cin >> command;
 
         switch(command) {
@@ -47,19 +47,19 @@ void showMenu() {
                 showHelp();
                 continue;
             case COMMAND_PLAY:
-                playGame(board, &condition, &player);
+                player = *playGame(board, &condition, &player, &turn);
                 continue;
             case COMMAND_DISPLAY:
                 showGame(board, &condition, &player);
                 continue;
             case COMMAND_REPLAY:
-                replay(board);
+                replay(board, &player, &turn);
                 continue;
             case COMMAND_EXIT:
                 exitGame();
                 break;
             default:
-                std::cout << "(ì—ëŸ¬) ìž˜ëª»ëœ ë²ˆí˜¸ ìž…ë‹ˆë‹¤." << std::endl;
+                std::cout << "(¿¡·¯) Àß¸øµÈ ¹øÈ£ ÀÔ´Ï´Ù." << std::endl;
                 continue;
         }
     }
@@ -67,19 +67,19 @@ void showMenu() {
 
 void showHelp() {
     system("cls");
-    std::cout << "[COMMAND HELP MENU]" << std::endl;
-    std::cout << "0 :: ëª…ë ¹ì–´ì— ëŒ€í•œ ì„¤ëª…ì„ ë³´ì—¬ì¤ë‹ˆë‹¤." << std::endl;
-    std::cout << "1 :: í‹±íƒí† ì— í–‰ê³¼ ì—´ì„ ìž…ë ¥í•©ë‹ˆë‹¤." << std::endl;
-    std::cout << "2 :: ê²Œìž„ì˜ ìƒí™©ì„ ë³´ì—¬ì¤ë‹ˆë‹¤." << std::endl;
-    std::cout << "3 :: ê²Œìž„ì„ ì´ˆê¸°í™” í•©ë‹ˆë‹¤." << std::endl;
-    std::cout << "4 :: ê²Œìž„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤." << std::endl;
+    std::cout << "[¸í·É¾î ÇïÇÁ ¸Þ´º]" << std::endl;
+    std::cout << "0 :: ¸í·É¾î¿¡ ´ëÇÑ ¼³¸íÀ» º¸¿©ÁÝ´Ï´Ù." << std::endl;
+    std::cout << "1 :: Æ½ÅÃÅä¿¡ Çà°ú ¿­À» ÀÔ·ÂÇÕ´Ï´Ù." << std::endl;
+    std::cout << "2 :: °ÔÀÓÀÇ »óÈ²À» º¸¿©ÁÝ´Ï´Ù." << std::endl;
+    std::cout << "3 :: °ÔÀÓÀ» ÃÊ±âÈ­ ÇÕ´Ï´Ù." << std::endl;
+    std::cout << "4 :: °ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù." << std::endl;
 }
 
 bool* checkCondition(int board[][LENGTH], int* col, int* row, bool* condition) {
     int sumOne = 0;
     int sumTwo = 0;
 
-    // ê°€ë¡œ/ì„¸ë¡œ ì²´í¬.
+    // °¡·Î/¼¼·Î Ã¼Å©.
     for(int i = 0; i < LENGTH; i++) {
         sumOne += board[*col][i];
         sumTwo += board[i][*row];
@@ -87,7 +87,7 @@ bool* checkCondition(int board[][LENGTH], int* col, int* row, bool* condition) {
             *condition = false;
     }
 
-    // ì •ëŒ€ê°/ì—­ëŒ€ê° ì²´í¬.
+    // Á¤´ë°¢/¿ª´ë°¢ Ã¼Å©.
     if((*col + *row) % 2 == 0) {
         for(int i = 0; i < LENGTH; i++) {
             sumOne += board[i][i];
@@ -100,44 +100,46 @@ bool* checkCondition(int board[][LENGTH], int* col, int* row, bool* condition) {
     return condition;
 }
 
-char* playGame(int board[][LENGTH], bool* condition, char* player) {
+char* playGame(int board[][LENGTH], bool* condition, char* player, int* turn) {
     system("cls");
     showGame(board, condition, player);
 
     if(*condition == true) {
-        std::cout << std::endl << player << "ì˜ ì°¨ë¡€ìž…ë‹ˆë‹¤." << std::endl;
+        std::cout << std::endl << player << " ÀÇ Â÷·ÊÀÔ´Ï´Ù." << std::endl;
         int col = -1, row = -1;
-        std::cout << "í–‰ê³¼ ì—´ì„ ìž…ë ¥í•´ì£¼ì„¸ìš”." << std::endl;
-        std::cout << "í–‰ > ";
+        std::cout << "Çà°ú ¿­À» ÀÔ·ÂÇØÁÖ¼¼¿ä." << std::endl;
+        std::cout << "Çà > ";
         std::cin >> col;
-        std::cout << "ì—´ > ";
+        std::cout << "¿­ > ";
         std::cin >> row;
 
         if(col >= LENGTH || row >= LENGTH) {
-            std::cout << "(ì—ëŸ¬) ìž˜ëª»ëœ ì¸ë±ìŠ¤ ìž…ë‹ˆë‹¤.";
+            std::cout << "(¿¡·¯) Àß¸øµÈ ÀÎµ¦½º ÀÔ´Ï´Ù.";
         }
         else if(board[col][row] != 0) {
-            std::cout << "(ì—ëŸ¬) ì ìœ ëœ ì¸ë±ìŠ¤ ìž…ë‹ˆë‹¤.";
+            std::cout << "(¿¡·¯) Á¡À¯µÈ ÀÎµ¦½º ÀÔ´Ï´Ù.";
         }
         else {
+            *turn = *turn + 1;
             board[col][row] = (*player == 'O') ? 1 : -1;
             condition = checkCondition(board, &col, &row, condition);
-
             if(*condition == true)
-                player = (*player == 'O') ? 'X' : 'O';
+                *player = (*player == 'O') ? 'X' : 'O';
+            else if(*turn == MAX)
+                *player = '\0';
+            return player;
         }
-
-
     }
     else {
-        std::cout << "ê²Œìž„ì´ ëë‚œ ìƒíƒœìž…ë‹ˆë‹¤.";
+        std::cout << "°ÔÀÓÀÌ ³¡³­ »óÅÂÀÔ´Ï´Ù.";
+        return player;
     }
 }
 
 void showGame(int board[][LENGTH], bool* condition, char* player) {
     system("cls");
-    std::cout << "[CURRENT BOARD]" << std::endl;
-    std::cout << "(0)(1)(2)" << std::endl;
+    std::cout << "[ÇöÀç º¸µåÆÇ]" << std::endl;
+    std::cout << "   (0)(1)(2)" << std::endl;
 
     for(int i = 0; i < LENGTH; i++) {
         std::cout << "(" << i << ")";
@@ -153,29 +155,32 @@ void showGame(int board[][LENGTH], bool* condition, char* player) {
     }
 
     if(*condition == true) {
-        std::cout << "ê²Œìž„ì´ ì•„ì§ ì§„í–‰ì¤‘ìž…ë‹ˆë‹¤.";
+        std::cout << "°ÔÀÓÀÌ ¾ÆÁ÷ ÁøÇàÁßÀÔ´Ï´Ù.";
     }else {
         if(*player == '\0')
-            std::cout << "ê²Œìž„ì´ ë¬´ìŠ¹ë¶€ë¡œ ëë‚¬ìŠµë‹ˆë‹¤." << std::endl;
+            std::cout << "°ÔÀÓÀÌ ¹«½ÂºÎ·Î ³¡³µ½À´Ï´Ù." << std::endl;
         else
-            std::cout << *player << "ì˜ ìŠ¹ë¦¬ë¡œ ê²Œìž„ì´ ëë‚¬ìŠµë‹ˆë‹¤.";
+            std::cout << *player << " ÀÇ ½Â¸®·Î °ÔÀÓÀÌ ³¡³µ½À´Ï´Ù.";
     }
 }
 
-void replay(int board[][LENGTH]) {
+void replay(int board[][LENGTH], char* player, int *turn, bool* condition) {
     system("cls");
-    std::cout << "ê²Œìž„ì„ ì´ˆê¸°í™” í•©ë‹ˆë‹¤." << std::endl;
+    std::cout << "°ÔÀÓÀ» ÃÊ±âÈ­ ÇÕ´Ï´Ù." << std::endl;
 
     for(int i = 0; i < LENGTH; i++) {
         for(int j = 0; j < LENGTH; j++) {
             board[i][j] = 0;
         }
     }
+    *player = 'O';
+    *turn = 1;
+    *condition = true;
 
-    std::cout << "ì´ˆê¸°í™”ê°€ ëë‚¬ìŠµë‹ˆë‹¤." << std::endl;
+    std::cout << "ÃÊ±âÈ­°¡ ³¡³µ½À´Ï´Ù." << std::endl;
 }
 
 void exitGame() {
     system("cls");
-    std::cout << "ê²Œìž„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.";
+    std::cout << "°ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.";
 }
