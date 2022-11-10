@@ -1,14 +1,14 @@
-#pragma once
+ï»¿#pragma once
 
 #define LENGTH 3
 #define MAX 10
 
 class TicTacToe {
     /*
-        board     : (O, X)¸¦ °¢°¢ (1, -1)·Î ´ëÀÀÇÏ¿© ÀúÀåÇÏ´Â 2Â÷¿ø ¹è¿­.
-        turn      : ÇöÀç ÅÏÀ» ÀúÀåÇÏ´Â int º¯¼ö.
-        player    : ÇöÀç ÇÃ·¹ÀÌ¾î¸¦ ÀúÀåÇÏ´Â char º¯¼ö.
-        condition : °ÔÀÓÀÇ »óÅÂ¸¦ ÀúÀåÇÏ´Â bool º¯¼ö.
+        board     : (O, X)ë¥¼ ê°ê° (1, -1)ë¡œ ëŒ€ì‘í•˜ì—¬ ì €ìž¥í•˜ëŠ” 2ì°¨ì› ë°°ì—´.
+        turn      : í˜„ìž¬ í„´ì„ ì €ìž¥í•˜ëŠ” int ë³€ìˆ˜.
+        player    : í˜„ìž¬ í”Œë ˆì´ì–´ë¥¼ ì €ìž¥í•˜ëŠ” char ë³€ìˆ˜.
+        condition : ê²Œìž„ì˜ ìƒíƒœë¥¼ ì €ìž¥í•˜ëŠ” bool ë³€ìˆ˜.
     */
     int board[LENGTH][LENGTH] = { 0 };
     int turn = 0;
@@ -17,15 +17,15 @@ class TicTacToe {
 
 public:
     /*
-        [ÇÔ¼ö ¼³¸í]
-        commands     : showMenu()¿¡¼­ »ç¿ëÇÒ ¿­°ÅÇü ÀÚ·áÇü.
-        showMenu()   : Ä¿¸Çµå¸¦ ÀÔ·ÂÇÏ´Â ¸Þ´º¸¦ È£ÃâÇÏ´Â ÇÔ¼ö.
-        showHelp()   : ÇÁ·Î±×·¥¿¡¼­ Ä¿¸ÇµåÀÇ ¼³¸íÀ» Ãâ·ÂÇÏ´Â ÇÔ¼ö.
-        showStatus() : °ÔÀÓÀÇ ÇöÀç º¸µåÆÇ, »óÅÂ¸¦ Ãâ·ÂÇÏ´Â ÇÔ¼ö.
-        checkGame()  : °ÔÀÓÀÇ ½Â¸®¸¦ °Ë»çÇÏ¿© bool*·Î ¹ÝÈ¯ÇÏ´Â ÇÔ¼ö.
-        playGame()   : Çà°ú ¿­À» ÀÔ·ÂÇÏ¿© °ÔÀÓÀ» ÁøÇàÇÏ´Â ÇÔ¼ö.
-        replayGame() : °ÔÀÓÀ» ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö.
-        exitGame()   : °ÔÀÓÀ» Á¾·áÇÏ´Â ÇÔ¼ö.
+        [í•¨ìˆ˜ ì„¤ëª…]
+        commands     : showMenu()ì—ì„œ ì‚¬ìš©í•  ì—´ê±°í˜• ìžë£Œí˜•.
+        showMenu()   : ì»¤ë§¨ë“œë¥¼ ìž…ë ¥í•˜ëŠ” ë©”ë‰´ë¥¼ í˜¸ì¶œí•˜ëŠ” í•¨ìˆ˜.
+        showHelp()   : í”„ë¡œê·¸ëž¨ì—ì„œ ì»¤ë§¨ë“œì˜ ì„¤ëª…ì„ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜.
+        showStatus() : ê²Œìž„ì˜ í˜„ìž¬ ë³´ë“œíŒ, ìƒíƒœë¥¼ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜.
+        checkGame()  : ê²Œìž„ì˜ ìŠ¹ë¦¬ë¥¼ ê²€ì‚¬í•˜ì—¬ bool*ë¡œ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜.
+        playGame()   : í–‰ê³¼ ì—´ì„ ìž…ë ¥í•˜ì—¬ ê²Œìž„ì„ ì§„í–‰í•˜ëŠ” í•¨ìˆ˜.
+        replayGame() : ê²Œìž„ì„ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜.
+        exitGame()   : ê²Œìž„ì„ ì¢…ë£Œí•˜ëŠ” í•¨ìˆ˜.
     */
     enum commands;
     void showMenu();
