@@ -30,7 +30,7 @@ public:
     enum commands;
     void showMenu();
     void showHelp();
-    void showStatus(int board[][LENGTH], bool* condition, char* player);
+    void showStatus(int board[][LENGTH], bool* condition, char* player, int* turn);
     bool* checkWinn(int* sumOne, int* sumTwo);
     bool* checkGame(int board[][LENGTH], bool* condition, int* col, int* row);
     char* playGame(int board[][LENGTH], bool* condition, char* player, int* turn);

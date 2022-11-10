@@ -56,7 +56,7 @@ bool* TicTacToe::checkGame(int board[][LENGTH], bool* condition, int* col, int* 
     return condition;
 }
 
-void TicTacToe::showStatus(int board[][LENGTH], bool* condition, char* player) {
+void TicTacToe::showStatus(int board[][LENGTH], bool* condition, char* player, int* turn) {
     system("cls");
     std::cout << "[현재 보드판]" << std::endl;
     std::cout << "   [0][1][2]" << std::endl;
@@ -77,7 +77,11 @@ void TicTacToe::showStatus(int board[][LENGTH], bool* condition, char* player) {
     std::cout << "\n[게임 상태]" << std::endl;
 
     if (*condition == true) {
-        std::cout << "게임이 아직 진행중입니다." << std::endl;
+        if (*turn == 0) {
+            std::cout << "게임이 시작되지 않았습니다." << std::endl;
+        }
+        else
+            std::cout << "게임이 진행중입니다." << std::endl;
     }
     else {
         if (*player == '\0')
@@ -89,7 +93,7 @@ void TicTacToe::showStatus(int board[][LENGTH], bool* condition, char* player) {
 
 char* TicTacToe::playGame(int board[][LENGTH], bool* condition, char* player, int* turn) {
     system("cls");
-    TicTacToe::showStatus(board, condition, player);
+    TicTacToe::showStatus(board, condition, player, turn);
 
     if (*turn == 0) {
         while (true) {
@@ -132,8 +136,10 @@ char* TicTacToe::playGame(int board[][LENGTH], bool* condition, char* player, in
                 *turn = *turn + 1;
                 board[col][row] = (*player == 'O') ? 1 : -1;
                 condition = TicTacToe::checkGame(board, condition, &col, &row);
-                *player = (*player == 'O' && *condition == true) ? 'X' : 'O';
                 
+                if (*condition == true)
+                    *player = (*player == 'O') ? 'X' : 'O';
+             
                 if (*turn == MAX) {
                     *condition = false;
                     *player = '\0';
@@ -214,7 +220,7 @@ void TicTacToe::showMenu() {
             continue;
         }
         else if (command == COMMAND_STAT) {
-            TicTacToe::showStatus(board, &condition, &player);
+            TicTacToe::showStatus(board, &condition, &player, &turn);
             continue;
         }
         else if (command == COMMAND_REPLAY) {
